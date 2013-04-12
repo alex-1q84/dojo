@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><beans  
+    xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:aop="http://www.springframework.org/schema/aop"  
+    xmlns:tx="http://www.springframework.org/schema/tx"  
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+                        http://www.springframework.org/schema/context  
+                        http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+                        http://www.springframework.org/schema/aop  
+                        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
+                        http://www.springframework.org/schema/tx  
+                        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<!-- 获取JDBC连接属性 -->
+	<context:property-placeholder location="classpath:config.properties" />
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+
+	<!-- sqlSessionFactory -->
+	<!-- MyBatis在spring中Bean的配置，都是固定的 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+	<!-- 事务管理 -->
+<!--     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> -->
+<!-- 		<property name="dataSource" ref="dataSource" />   -->
+<!--     </bean> -->
+            
+	<!-- AOP -->
+	<aop:config>
+		<aop:aspect id="activeLogger" ref="activeLog">
+			<aop:pointcut expression="execution(* com.best.demo.myblog.service.PostService.addArticle(..))" id="addArticle"/>
+			<aop:pointcut expression="execution(* com.best.demo.myblog.service.AuthorService.addUser(..)) and args(user)" id="addUser"/>
+<!-- 			<aop:pointcut expression="execution(* com.best.demo.myblog.service.*.*(..))" id="addArticle"/> -->
+<!-- 			<aop:before method="logAddUser" arg-names="user" pointcut="AuthorService.addUser" pointcut-ref="addUser"/> -->
+			<aop:before method="logAddUser" arg-names="user" pointcut-ref="addUser"/>
+			<aop:after-returning method="logAddArticle" returning="article" pointcut-ref="addArticle"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- 配置映射器 -->
+	<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.best.demo.myblog.dao.UserDao" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="articleDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.best.demo.myblog.dao.ArticleDao" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="activeDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.best.demo.myblog.dao.ActiveDao" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 为业务逻辑层注入数据的对象 -->
+	<bean id="postService" class="com.best.demo.myblog.service.impl.PostServiceImpl">
+		<property name="articleDao" ref="articleDao"></property>
+	</bean>
+
+	<bean id="activeService" class="com.best.demo.myblog.service.impl.ActiveServiceImpl">
+		<property name="activeDao" ref="activeDao"></property>
+	</bean>
+	<bean id="authorService" class="com.best.demo.myblog.service.impl.AuthorServiceImpl">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="activeLog" class="com.best.demo.myblog.service.impl.ActiveLoggerImpl">
+		<property name="authorService" ref="authorService"></property>
+		<property name="activeService" ref="activeService"></property>
+	</bean>
+</beans>  

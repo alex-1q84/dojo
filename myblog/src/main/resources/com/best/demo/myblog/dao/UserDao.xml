@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//myblog.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.best.demo.myblog.dao.UserDao">
+	<resultMap type="User" id="UserMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="email" property="email"/>
+		<result column="password" property="password"/>
+	</resultMap>
+	
+	<select id="getUser" parameterType="long" resultType="User">
+		select * from User where id = #{id}
+	</select>
+	<select id="getUserByName" parameterType="String" resultType="User">
+		select * from User where name = #{name}
+	</select>
+	
+	<insert id="save" keyProperty="id" keyColumn="id" parameterType="User">
+		insert into User (id, name, email, password) values(#{id}, #{name}, #{email},
+		#{password})
+        <selectKey keyProperty="id" resultType="long" order="AFTER">  
+            SELECT LAST_INSERT_ID();  
+        </selectKey>  
+	</insert>
+	<update id="update" parameterType="User">
+		update User set name=#{name},email=#{email},password=#{password} where
+		id=#{id}
+	</update>
+	<delete id="delete" parameterType="long">
+		delete from User where id=#{id}
+	</delete>
+	
+	<delete id="deleteAll">
+		delete from User
+	</delete>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.best.demo.myblog.dao.ActiveDao">
+	<resultMap type="Active" id="activeMap">
+		<id javaType="long" column="id" property="id" />
+		<result column="uid" javaType="long" property="uid" />
+		<result column="description" javaType="string" property="description" />
+		<result column="create_date" javaType="java.util.Date" property="createDate" />
+	</resultMap>
+	<select id="getActive" parameterType="long" resultType="Active">
+		select * from Active where id = #{id}
+	</select>
+
+	<select id="getActiveByUser" parameterType="long" resultType="Active">
+		select * from Active where uid = #{uid}
+	</select>
+
+	<insert id="save" parameterType="Active">
+		insert into active (id, uid, description, create_date)
+		values (#{id}, #{uid}, #{description}, #{createDate})
+		<selectKey keyProperty="id" resultType="long" order="AFTER">
+			SELECT LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+	<delete id="deleteAll">
+		delete from active
+	</delete>
+</mapper>
