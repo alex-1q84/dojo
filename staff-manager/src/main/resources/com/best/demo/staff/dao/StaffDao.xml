@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//staff.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.best.demo.staff.dao.StaffDao">
+	<resultMap type="Staff" id="StaffMap">
+		<id column="id" property="id"/>
+		<result column="dept_id" property="deptId"/>
+		<result column="station_id" property="stationId"/>
+		<result column="code" property="code"/>
+		<result column="name" property="name"/>
+		<result column="phone" property="phone"/>
+		<result column="password" property="password"/>
+		<result column="address" property="address"/>
+		<result column="op_type" property="opType"/>
+		<result column="priv_barcode" property="privBarcode"/>
+		<result column="create_date" property="createDate"/>
+		<result column="update_date" property="updateDate"/>
+	</resultMap>
+	
+	<select id="getStaff" parameterType="long" resultType="Staff">
+		select * from Staff where id = #{id}
+	</select>
+	<select id="getStaffByName" parameterType="String" resultType="Staff">
+		<bind name="pattern" value="_parameter + '%'"/>
+		select * from Staff where name like #{pattern}
+	</select>
+	
+	<select id="query" parameterType="Staff">
+		<bind name="pattern" value="_parameter.getName() + '%'"/>
+		select * from staff
+		<where>
+			<if test="id != 0">
+				id= #{id}
+			</if>
+			<if test="deptId != 0">
+				and dept_id = #{deptId}
+			</if>
+			<if test="name != null">
+				and name like #{pattern}
+			</if>
+		</where>
+		<trim prefix="where" prefixOverrides="and "> </trim>
+	</select>
+	
+	<insert id="save" keyProperty="id" keyColumn="id" parameterType="Staff">
+		INSERT INTO staff (id, dept_id, station_id, code, name, 
+			phone, password, address, op_type, priv_barcode, 
+			create_date, update_date) VALUES
+			(#{id}, #{deptId}, #{stationId}, #{code}, #{name}, 
+			#{phone}, #{password}, #{address}, #{opType}, #{privBarcode}, 
+			#{createDate}, #{updateDate})
+        <selectKey keyProperty="id" resultType="long" order="AFTER">  
+            SELECT LAST_INSERT_ID();  
+        </selectKey>  
+	</insert>
+	<update id="update" parameterType="Staff">
+		update staff
+		set priv_barcode=#{privBarcode}, 
+		<set>
+			<if test="deptId != 0">set dept_id = #{deptId},</if>
+			<if test="stationId != 0">set station_id=#{stationId},</if>
+			<if test="code != null">set code=#{code},</if>
+			<if test="name != null">set name=#{name},</if>
+			<if test="phone != null">set phone=#{phone},</if>
+			<if test="password != null">set password=#{password},</if>
+			<if test="address != null">set address=#{address},</if>
+			<if test="opType &gt;= 0">set op_type=#{opType},</if>
+			<if test="createDate != null">set create_date=#{createDate},</if>
+			<if test="updateDate != null">set update_date=#{updateDate}</if>
+		</set>
+		where id=#{id}
+		<trim prefix="set" suffixOverrides=","></trim>
+	</update>
+	<delete id="delete" parameterType="long">
+		delete from Staff where id=#{id}
+	</delete>
+	
+	<delete id="deleteAll">
+		delete from Staff
+	</delete>
+</mapper>
