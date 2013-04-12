@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.best.demo.mybatis.dao.UserDao">
+	<resultMap type="com.best.demo.mybatis.dao.User" id="UserMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="email" property="email"/>
+		<result column="password" property="password"/>
+	</resultMap>
+	
+	<select id="getUser" parameterType="long" resultType="com.best.demo.mybatis.dao.User">
+		select * from User where id = #{id}
+	</select>
+	<select id="getUserByName" parameterType="String" resultType="com.best.demo.mybatis.dao.User">
+		select * from User where name = #{name}
+	</select>
+	
+	<select id="getUserByName" parameterType="String" resultType="com.best.demo.mybatis.dao.User">
+		select * from User where name = #{name}
+	</select>
+	
+	<insert id="save" keyProperty="id" keyColumn="id" parameterType="com.best.demo.mybatis.dao.User">
+		insert into User (id, name, email, password) values(#{id}, #{name}, #{email},
+		#{password})
+        <selectKey keyProperty="id" resultType="long" order="AFTER">  
+            SELECT LAST_INSERT_ID();  
+        </selectKey>  
+	</insert>
+	<update id="update" parameterType="com.best.demo.mybatis.dao.User">
+		update User set name=#{name},email=#{email},password=#{password} where
+		id=#{id}
+	</update>
+	<delete id="delete" parameterType="long">
+		delete from User where id=#{id}
+	</delete>
+	
+	<delete id="deleteAll">
+		delete from User
+	</delete>
+</mapper>
