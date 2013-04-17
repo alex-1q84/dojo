@@ -17,14 +17,14 @@ public class PerformanceMonitor {
 	public Object logExcuteTime(ProceedingJoinPoint pjp) {
 		try {
 			long begin = System.currentTimeMillis();
-			log.info(String.format("·½·¨%s ¿ªÊ¼Ê±¼ä%s", pjp.getSignature().toString(), new Date(begin)));
+			log.info(String.format("æ–¹æ³•%s å¼€å§‹æ—¶é—´%s", pjp.getSignature().toString(), new Date(begin)));
 			Object result = pjp.proceed();
 			long end = System.currentTimeMillis();
-			log.info(String.format("·½·¨%s ½áÊøÊ±¼ä %s Ê±³¤ %dºÁÃë", pjp.getSignature().toString(), new Date(end), end-begin));
+			log.info(String.format("æ–¹æ³•%s ç»“æŸæ—¶é—´ %s æ—¶é•¿ %dæ¯«ç§’", pjp.getSignature().toString(), new Date(end), end-begin));
 			
 			return result;
 		} catch (Throwable e) {
-			log.warn("AOP Òì³£", e);
+			log.warn("AOP å¼‚å¸¸", e);
 		}
 		return null;
 	}

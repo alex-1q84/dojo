@@ -6,6 +6,15 @@ public class Department {
 	private String code;
 	private String name;
 	
+	public Department(){
+		this(null, null);
+	}
+	
+	public Department(String code, String name) {
+		this.code = code;
+		this.name = name;
+	}
+	
 	public long getId() {
 		return id;
 	}

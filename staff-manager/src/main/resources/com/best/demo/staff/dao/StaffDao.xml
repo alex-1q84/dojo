@@ -16,22 +16,38 @@
 		<result column="priv_barcode" property="privBarcode"/>
 		<result column="create_date" property="createDate"/>
 		<result column="update_date" property="updateDate"/>
+		
+		<association property="department" javaType="Department">
+			<id property="id" column="dept_id"/>
+			<result property="code" column="dept_code"/>
+			<result property="name" column="dept_name"/>
+		</association>
 	</resultMap>
 	
-	<select id="getStaff" parameterType="long" resultType="Staff">
-		select * from Staff where id = #{id}
+	<resultMap type="StaffStatistic" id="statisticMap">
+		<result property="stationId" column="station_id"/>
+		<result property="deptId" column="dept_id"/>
+		<result property="count" column="count"/>
+	</resultMap>
+	
+	<select id="getStaff" parameterType="long" resultMap="StaffMap">
+		select s.*, d.code as dept_code, d.name as dept_name from Staff s ,Department d where s.dept_id=d.id and s.id = #{id}
 	</select>
+	
 	<select id="getStaffByName" parameterType="String" resultType="Staff">
 		<bind name="pattern" value="_parameter + '%'"/>
 		select * from Staff where name like #{pattern}
 	</select>
 	
-	<select id="query" parameterType="Staff">
+	<select id="query" parameterType="Staff" resultType="Staff">
 		<bind name="pattern" value="_parameter.getName() + '%'"/>
 		select * from staff
 		<where>
 			<if test="id != 0">
 				id= #{id}
+			</if>
+			<if test="stationId != 0">
+				and station_id = #{stationId}
 			</if>
 			<if test="deptId != 0">
 				and dept_id = #{deptId}
@@ -41,6 +57,36 @@
 			</if>
 		</where>
 		<trim prefix="where" prefixOverrides="and "> </trim>
+	</select>
+	
+	<select id="queryByRange" resultType="Staff">
+	<!-- 如果staff.name为null时会出现NullPointerException，待解决 -->
+<!-- 		<bind name="pattern" value="staff.name + '%'"/> -->
+		select * from staff
+		<where>
+			<choose>
+				<when test="staff.id != 0">
+				id= #{staff.id}
+				</when>
+				<otherwise>
+					<if test="staff.stationId != 0">
+						station_id = #{staff.stationId}
+					</if>
+					<if test="staff.deptId != 0">
+						and dept_id = #{staff.deptId}
+					</if>
+<!-- 					<if test="staff.name != null"> -->
+<!-- 						and name like #{pattern} -->
+<!-- 					</if> -->
+				</otherwise>
+			</choose>
+		</where>
+		limit #{begin}, #{end}
+		<trim prefix="where" prefixOverrides="and "> </trim>
+	</select>
+	
+	<select id="statistic" resultMap="statisticMap">
+		select station_id, dept_id, count(id) as count from staff group by station_id, dept_id
 	</select>
 	
 	<insert id="save" keyProperty="id" keyColumn="id" parameterType="Staff">

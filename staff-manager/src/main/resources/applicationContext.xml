@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><beans  
-    xmlns="http://www.springframework.org/schema/beans"  
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"  
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
     xmlns:context="http://www.springframework.org/schema/context"  
     xmlns:aop="http://www.springframework.org/schema/aop"  
@@ -40,8 +40,9 @@
     
     <!-- 启用注解配置，并指定扫描位置 -->
     <context:component-scan base-package="com.best.demo.staff.dao,
-	    com.best.demo.staff.service,
-	    com.best.demo.staff.aid">
+ 	    com.best.demo.staff.service,
+ 	    com.best.demo.staff.aid,
+ 	    com.best.demo.staff.task">
 	    <!-- 指明包括Aspect注解扫描 -->
 	    <context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/> 
     </context:component-scan>
@@ -74,12 +75,31 @@
         <property name="basePackage" value="com.best.demo.staff.dao"/>  
     </bean>  
 
-	<!-- 为业务逻辑层注入数据的对象 -->
-<!-- 	<bean id="departmentService" class="com.best.demo.staff.service.impl.DepartmentServiceImpl"> -->
-<!-- 		<property name="departmentDao" ref="departmentDao"></property> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="userService" class="com.best.demo.staff.service.impl.userServiceImpl"> -->
-<!-- 		<property name="staffDao" ref="staffDao"></property> -->
-<!-- 	</bean> -->
+	<bean name="staffStatisticsQuartz"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="staffStatisticsTask" />
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+	<bean id="quartzTrigger" lazy-init="false" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<!-- 触发bean配置 -->
+		<property name="jobDetail" ref="staffStatisticsQuartz" />
+		<!-- 触发时间配置 -->
+		<property name="cronExpression">
+			<value>0/10 * * * * ?</value>
+		</property>
+	</bean> 
+	<bean id="schedualerFactory"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<!-- 添加触发器 -->
+		<property name="triggers">
+			<list>
+				<ref bean="quartzTrigger" />
+			</list>
+		</property>
+	</bean> 
 </beans>  

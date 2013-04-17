@@ -7,6 +7,11 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>staff-manager Maven Webapp</name>
   <url>http://maven.apache.org</url>
+  <properties>
+    <spring.version>3.2.2.RELEASE</spring.version>  
+    <jackson.version>1.9.12</jackson.version>  
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+  </properties>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -17,22 +22,22 @@
     <dependency>
     	<groupId>org.springframework</groupId>
     	<artifactId>spring-context</artifactId>
-    	<version>3.2.2.RELEASE</version>
+    	<version>${spring.version}</version>
     </dependency>
     <dependency>
     	<groupId>org.springframework</groupId>
     	<artifactId>spring-webmvc</artifactId>
-    	<version>3.2.2.RELEASE</version>
+    	<version>${spring.version}</version>
     </dependency>
     <dependency>
     	<groupId>org.springframework</groupId>
     	<artifactId>spring-tx</artifactId>
-    	<version>3.2.2.RELEASE</version>
+    	<version>${spring.version}</version>
     </dependency>
     <dependency>
     	<groupId>org.springframework</groupId>
     	<artifactId>spring-aspects</artifactId>
-    	<version>3.2.2.RELEASE</version>
+    	<version>${spring.version}</version>
     </dependency>
     <dependency>
     	<groupId>org.mybatis</groupId>
@@ -57,20 +62,70 @@
     <dependency>
     	<groupId>org.springframework</groupId>
     	<artifactId>spring-test</artifactId>
-    	<version>3.2.2.RELEASE</version>
+    	<version>${spring.version}</version>
     </dependency>
     <dependency>
     	<groupId>org.springframework</groupId>
     	<artifactId>spring-jdbc</artifactId>
-    	<version>3.2.2.RELEASE</version>
+    	<version>${spring.version}</version>
     </dependency>
     <dependency>
     	<groupId>mysql</groupId>
     	<artifactId>mysql-connector-java</artifactId>
     	<version>5.1.24</version>
     </dependency>
+    <dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.17</version>
+	</dependency>
+    <dependency>
+    	<groupId>org.apache.commons</groupId>
+    	<artifactId>commons-lang3</artifactId>
+    	<version>3.1</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.codehaus.jackson</groupId>
+    	<artifactId>jackson-core-asl</artifactId>
+    	<version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.opensymphony.quartz</groupId>
+    	<artifactId>quartz-all</artifactId>
+    	<version>1.6.1</version>
+    </dependency>
+    <dependency>
+    	<groupId>commons-collections</groupId>
+    	<artifactId>commons-collections</artifactId>
+    	<version>3.2.1</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.codehaus.jackson</groupId>
+    	<artifactId>jackson-mapper-asl</artifactId>
+    	<version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-jaxrs</artifactId>
+		<version>${jackson.version}</version>
+	</dependency>
+    <dependency>
+    	<groupId>javax</groupId>
+    	<artifactId>javaee-api</artifactId>
+    	<version>6.0</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>staff-manager</finalName>
+    <plugins>
+	    <plugin>
+	        <artifactId>maven-compiler-plugin</artifactId>
+	        <version>2.3.2</version>
+	        <configuration>
+		        <source>1.6</source>
+		        <target>1.6</target>
+	        </configuration>
+        </plugin>
+    </plugins>
   </build>
 </project>

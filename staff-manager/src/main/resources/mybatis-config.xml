@@ -22,6 +22,7 @@
 <!-- 	</environments> -->
 	<typeAliases>
 		<typeAlias type="com.best.demo.staff.dao.Staff" alias="Staff"/>
+		<typeAlias type="com.best.demo.staff.dao.StaffStatistic" alias="StaffStatistic"/>
 		<typeAlias type="com.best.demo.staff.dao.Department" alias="Department"/>
 	</typeAliases>
 <!-- 	<mappers> -->

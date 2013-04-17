@@ -2,6 +2,7 @@ package com.best.demo.staff.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,8 @@ public interface StaffDao {
 	
 	public List<Staff> query(Staff staff);
 	
+	public List<Staff> queryByRange(@Param("staff")Staff staff, @Param("begin")int begin, @Param("end")int end);
+	
 	@Transactional
 	public void update(Staff staff);
 	
@@ -23,4 +26,8 @@ public interface StaffDao {
 	
 	@Transactional
 	public void deleteAll();
+
+	public List<Staff> getStaffByName(String name);
+	
+	public List<StaffStatistic> statistic();
 }
