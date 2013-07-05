@@ -1,4 +1,7 @@
 *.class
+*.pyc
+*.swp
+*.o
 target
 
 # Package Files #
