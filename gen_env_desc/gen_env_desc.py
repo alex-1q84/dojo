@@ -27,15 +27,16 @@ props = (
 )
 
 
-def gen_desc(pom):
+def gen_desc(pom, namespace='{http://maven.apache.org/POM/4.0.0}'):
     with open(pom) as cfg:
         root = ET.parse(cfg).getroot()
-        print ET.dump(root)
-        profiles = root.findall("profiles/profile")
+        # print ET.dump(root)
+        profiles = root.findall('%sprofiles/%sprofile' % (namespace, namespace))
         print len(profiles)
         for profile in profiles:
             for prop in props:
-                print profile.find(prop).text
+                print profile
+                print profile.get('%s%s' % (namespace, prop)).text
 
 
 if __name__ == '__main__':
