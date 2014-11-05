@@ -57,4 +57,15 @@ public class ResizingArrayStackTest {
         assertEquals(3, item);
         assertEquals(0, stack.size());
     }
+
+    @Test
+    public void test_init_stack_by_capacity() {
+        ResizingArrayStack stack = new ResizingArrayStack(0);
+        try {
+            stack.push(1);
+            fail("should throw an exception because of the stack capacity is 0");
+        } catch (IndexOutOfBoundsException e) {
+            //Just expect this option will throw this exception
+        }
+    }
 }
