@@ -67,7 +67,7 @@ public class ResizingArrayStackTest {
 
     @Test
     public void test_init_stack_by_capacity() {
-        ResizingArrayStack stack = new ResizingArrayStack(0);
+        ResizingArrayStack<Integer> stack = new ResizingArrayStack<Integer>(0);
         try {
             stack.push(1);
             fail("should throw an exception because of the stack capacity is 0");
