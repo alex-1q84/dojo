@@ -3,12 +3,12 @@ package me.changhai.algorithms.ch1;
 /**
  * Created by bl02515 on 14/11/3.
  */
-public class ResizingArrayStack {
-    private int[] data;
+public class ResizingArrayStack<ITEM> {
+    private Object[] data;
     private int n = 0;
 
     public ResizingArrayStack(int capacity) {
-        this.data = new int[capacity];
+        this.data = new Object[capacity];
     }
 
     public ResizingArrayStack() {
@@ -23,11 +23,11 @@ public class ResizingArrayStack {
         return n;
     }
 
-    public void push(int item) {
+    public void push(ITEM item) {
         data[n++] = item;
     }
 
-    public int pop() {
-        return data[--n];
+    public ITEM pop() {
+        return (ITEM) data[--n];
     }
 }

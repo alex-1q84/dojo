@@ -7,11 +7,11 @@ import org.junit.Test;
 
 public class ResizingArrayStackTest {
 
-    ResizingArrayStack stack;
+    ResizingArrayStack<Integer> stack;
 
     @Before
     public void setUp() throws Exception {
-        stack = new ResizingArrayStack();
+        stack = new ResizingArrayStack<Integer>();
     }
 
     @Test
@@ -56,6 +56,13 @@ public class ResizingArrayStackTest {
         item = stack.pop();
         assertEquals(3, item);
         assertEquals(0, stack.size());
+    }
+
+    @Test
+    public void test_string_stack() throws Exception {
+        ResizingArrayStack<String> strStack = new ResizingArrayStack<String>();
+        strStack.push("a");
+        assertEquals("a", strStack.pop());
     }
 
     @Test
