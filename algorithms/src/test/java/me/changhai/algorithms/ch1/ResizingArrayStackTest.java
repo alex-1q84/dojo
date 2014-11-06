@@ -1,5 +1,7 @@
 package me.changhai.algorithms.ch1;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
@@ -66,13 +68,11 @@ public class ResizingArrayStackTest {
     }
 
     @Test
-    public void test_init_stack_by_capacity() {
-        ResizingArrayStack<Integer> stack = new ResizingArrayStack<Integer>(0);
-        try {
-            stack.push(1);
-            fail("should throw an exception because of the stack capacity is 0");
-        } catch (IndexOutOfBoundsException e) {
-            //Just expect this option will throw this exception
-        }
+    public void test_auto_resize() throws Exception {
+        ResizingArrayStack<Integer> stack = new ResizingArrayStack<Integer>(1);
+        stack.push(1);
+        stack.push(2);
+        assertThat(stack.pop(), is(equalTo(2)));
+        assertThat(stack.pop(), is(equalTo(1)));
     }
 }
