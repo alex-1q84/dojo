@@ -50,6 +50,7 @@ public class ResizingArrayStack<ITEM> implements Iterable<ITEM>{
     public ITEM pop() {
         @SuppressWarnings("unchecked")
         ITEM item = (ITEM) data[--n];
+        data[n] = null;
         //这么做保证剩余可用空间总是现有元素数量的一倍，不至于浪费过多内存
         if (n > 0 && n == data.length / 4) {
             resize(data.length / 2);
@@ -63,6 +64,7 @@ public class ResizingArrayStack<ITEM> implements Iterable<ITEM>{
     }
 
     private class ResizingArrayIterator implements Iterator<ITEM> {
+        private int i = n;
 
         @Override
         public boolean hasNext() {
@@ -72,7 +74,8 @@ public class ResizingArrayStack<ITEM> implements Iterable<ITEM>{
         @Override
         public ITEM next() {
             //noinspection unchecked
-            return (ITEM) data[--n];
+            ITEM item = (ITEM) data[--i];
+            return item;
         }
     }
 }
