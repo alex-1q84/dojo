@@ -2,7 +2,10 @@ package me.changhai.algorithms.ch1;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
+
+import java.util.Iterator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -74,5 +77,19 @@ public class ResizingArrayStackTest {
         stack.push(2);
         assertThat(stack.pop(), is(equalTo(2)));
         assertThat(stack.pop(), is(equalTo(1)));
+    }
+
+    @Test
+    public void test_iterator() throws Exception {
+        Iterator<Integer> iterator = stack.iterator();
+        assertThat(iterator, is(notNullValue()));
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        assertThat(iterator.hasNext(), is(true));
+        assertThat(iterator.next(), is(3));
+        assertThat(iterator.next(), is(2));
+        assertThat(iterator.next(), is(1));
+        assertThat(iterator.hasNext(), is(false));
     }
 }

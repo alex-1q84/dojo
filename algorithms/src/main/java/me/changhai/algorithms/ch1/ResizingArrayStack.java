@@ -1,9 +1,11 @@
 package me.changhai.algorithms.ch1;
 
+import java.util.Iterator;
+
 /**
  * Created by hailxl@gmail.com on 14/11/3.
  */
-public class ResizingArrayStack<ITEM> {
+public class ResizingArrayStack<ITEM> implements Iterable<ITEM>{
     private Object[] data;
     private int n = 0;
 
@@ -46,11 +48,31 @@ public class ResizingArrayStack<ITEM> {
     }
 
     public ITEM pop() {
+        @SuppressWarnings("unchecked")
         ITEM item = (ITEM) data[--n];
         //这么做保证剩余可用空间总是现有元素数量的一倍，不至于浪费过多内存
         if (n > 0 && n == data.length / 4) {
             resize(data.length / 2);
         }
         return item;
+    }
+
+    @Override
+    public Iterator<ITEM> iterator() {
+        return new ResizingArrayIterator();
+    }
+
+    private class ResizingArrayIterator implements Iterator<ITEM> {
+
+        @Override
+        public boolean hasNext() {
+            return n > 0;
+        }
+
+        @Override
+        public ITEM next() {
+            //noinspection unchecked
+            return (ITEM) data[--n];
+        }
     }
 }
