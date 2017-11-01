@@ -12,3 +12,5 @@ target
 *.ear
 
 db.sqlite3
+*.log
+.ropeproject
