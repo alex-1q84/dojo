@@ -5,6 +5,7 @@
 *.o
 target
 **/target
+*~
 
 # Package Files #
 *.jar
